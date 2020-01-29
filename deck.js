@@ -7,7 +7,7 @@ let Deck = {
   Load: function () {
     for (let suit in suits) {
       for (let rank in ranks) {
-        cardArray.push(new Card(suits[suit], ranks[rank]));
+        cardArray.push(new Card(suits[suit], ranks[rank])):
       }
     }
   }
