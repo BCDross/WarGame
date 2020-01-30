@@ -1,0 +1,34 @@
+body{
+  font-family: sans-serif;
+}
+
+#game_board{
+  width: 750px;
+  border-style: solid;
+  border-color: darkblue;
+  border-width: 20px;
+}
+
+#rules{
+  display: block;
+}
+
+#buttons{
+  text-align: center;
+}
+
+#deal{
+  width: 100px;
+  height: 40px;
+  border-radius: 15px;
+  background-color: darkcyan;
+  display: block;
+}
+
+#next{
+  width: 100px;
+  height: 40px;
+  border-radius: 15px;
+  background-color: forestgreen;
+  display: none;
+}

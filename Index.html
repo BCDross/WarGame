@@ -18,21 +18,41 @@
   </head>
 
   <body>
-    <!--[if lt IE 7]>
+    <div id="game_board">
+      <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <h1>Welcome to a game of War!</h1>
-    <div id="Rules">
-      This is a game of War! <br />
-      Rules of War! <br />
-      Each player gets 26 cards!<br />
-      Each turn each player will put down 1 card.<br />
-      Points are awarded for the player with the higher card rank.<br />
-      In the event of a tie the suit is used to break the tie. <br />
-      <br />
+      <h1>Welcome to a game of War!</h1>
+
+      <div id="rules">
+        <h3>The Rules of War</h3>
+        Each player gets 26 cards!<br />
+        Each turn each player will put down 1 card.<br />
+        Points are awarded for the player with the higher card rank.<br />
+        In the event of a tie the suit is used to break the tie. <br />
+      </div>
+      <div id="gamefield">
+
+        <label id="turnCounter"></label>
+        <div>
+          <label>Computer Score</label>
+          <label id="computerScore"></label>
+          <label class="card" id="computerCard"></label>
+        </div>
+        <div>
+          <label>Player Score</label>
+          <label id="playerScore"></label>
+          <label class="card" id="playerCard"></label>
+        </div>
+        <p id="message"></p>
+      </div>
+
+      <div id="buttons">
+        <button id="deal">DEAL</button>
+        <button id="next">NEXT</button>
+      </div>
+      <script src="" async defer></script>
     </div>
-    <button id="deal_hands">Deal</button>
-    <script src="" async defer></script>
   </body>
 
 </html>
