@@ -4,17 +4,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
   let computerArray = [];
 
   document.getElementById("deal").addEventListener("click", function() {
+    // Reset game to play again.
+    Deck.cardArray = [];
+    document.getElementById("playerScore").innertext = "";
+    document.getElementById("computerScore").innertext = "";
+    document.getElementById("playerCard").innertext = "";
+    document.getElementById("computerCard").innertext = "";
+    document.getElementById("turnCounter").innertext = 0;
+
     Deck.Load();
 
     // cardArray.forEach(card => {
     //   console.log(card);
     // });
-    let i;
     let random;
     let handSize = cardArray.length / 2;
     console.log(handSize);
 
-    for (i = 0; i < cardArray.length; i++) {
+    for (let i = 0; i < cardArray.length; i++) {
       random = Math.floor(Math.random() * cardArray.length);
       if (cardArray[random].inuse === false) {
         shuffledDeck.push(cardArray[random]);
@@ -24,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       }
     }
 
-    for (i = 0; i < handSize; i++) {
+    for (let i = 0; i < handSize; i++) {
       computerArray[i] = shuffledDeck[i];
       playerArray[i] = shuffledDeck[i + 26];
     }
@@ -35,12 +42,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById("next").style.display = "block";
 
     console.log("Player Hand");
-    for (i = 0; i < handSize; i++) {
+    for (let i = 0; i < handSize; i++) {
       console.log(playerArray[i]);
     }
     console.log("*******************************");
     console.log("Computer Hand");
-    for (i = 0; i < handSize; i++) {
+    for (let i = 0; i < handSize; i++) {
       console.log(computerArray[i]);
     }
   });
@@ -49,9 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let handSize = playerArray.length;
     let turnCounter = Number(document.getElementById("turnCounter").innerText);
     let playerScore = Number(document.getElementById("playerScore").innerText);
-    let computerScore = Number(
-      document.getElementById("computerScore").innerText
-    );
+    let computerScore = Number(document.getElementById("computerScore").innerText);
 
     if (playerArray[turnCounter].rank > computerArray[turnCounter].rank) {
       playerScore++;
@@ -62,22 +67,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (playerArray[turnCounter].rank === computerArray[turnCounter].rank){
       if (playerArray[turnCounter].suit > computerArray[turnCounter].suit){
         playerScore++;
+        document.getElementById("message").innerText = "You won the hand.";
       }
       if (playerArray[turnCounter].suit < computerArray[turnCounter].suit){
         computerScore++;
+        document.getElementById("message").innerText = "You lost the hand.";
       }
     }
-
-    document.getElementById("playerCard").innerText =
-      "Rank: " +
-      playerArray[turnCounter].rank +
-      " Suit: " +
-      playerArray[turnCounter].suit;
-    document.getElementById("computerCard").innerText =
-      "Rank: " +
-      computerArray[turnCounter].rank +
-      " Suit: " +
-      computerArray[turnCounter].suit;
+    let playerCardDisplay = "Rank: " + swapRank(playerArray[turnCounter].Rank) + " Suit: " + swapSuit(playerArray[turnCounter].Suit);
+    document.getElementById("playerCard").innerText = playerCardDisplay;
+    document.getElementById("computerCard").innerText = "Rank: " + swapRank(computerArray[turnCounter].Rank) + " Suit: " + " " + swapSuit(computerArray[turnCounter].Suit);
       
     document.getElementById("playerScore").innerText = playerScore;
     document.getElementById("computerScore").innerText = computerScore;
@@ -99,38 +98,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   });
 
-  let DisplayCard = function(pCard) {
-    dCard = pCard;
-    switch (dCard.Rank) {
+  let swapRank = function(pRank) {
+    switch (pRank) {
       case 11:
-        dCard.Rank = "JACK";
-        break;
+        pRank = "JACK";
       case 12:
-        dCard.Rank = "QUEEN";
-        break;
+        pRank = "QUEEN";
       case 13:
-        dCard.Rank = "KING";
-        break;
+        pRank = "KING";
       case 14:
-        dCard.Rank = "ACE";
-        break;
+        pRank = "ACE";
       default:
         break;
     }
-    switch (dCard.Suit) {
+    return pRank;
+  };
+  let swapSuit = function(pSuit){
+    switch (pSuit) {
       case 1:
-        dCard.Suit = "SPADE";
-        break;
+        pSuit = "SPADE";
       case 2:
-        dCard.Suit = "CLUB";
-        break;
+        pSuit = "CLUB";
       case 3:
-        dCard.Suit = "DIAMOND";
-        break;
+        pSuit = "DIAMOND";
       case 4:
-        dCard.Suit = "HEART";
-        break;
+        pSuit = "HEART";
     }
-    return dCard;
+    return pSuit;
   };
 });
