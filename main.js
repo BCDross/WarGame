@@ -2,15 +2,28 @@ document.addEventListener("DOMContentLoaded", function(event) {
   let shuffledDeck = [];
   let playerArray = [];
   let computerArray = [];
+  let handSize = 0;
 
-  document.getElementById("deal").addEventListener("click", function() {
+  let dealEle = document.getElementById("deal");
+  let nextEle = document.getElementById("next");
+  let pScoreEle = document.getElementById("playerScore");
+  let cScoreEle = document.getElementById("computerScore");
+  let pCardEle = document.getElementById("playerCard");
+  let cCardEle = document.getElementById("computerCard");
+  let turnEle = document.getElementById("turnCounter");
+  let rulesEle = document.getElementById("rules");
+  let messageEle = document.getElementById("message");
+
+  dealEle.addEventListener("click", function() {
     // Reset game to play again.
-    Deck.cardArray = [];
-    document.getElementById("playerScore").innertext = "";
-    document.getElementById("computerScore").innertext = "";
-    document.getElementById("playerCard").innertext = "";
-    document.getElementById("computerCard").innertext = "";
-    document.getElementById("turnCounter").innertext = 0;
+    shuffledDeck = [];
+    playerArray = [];
+    computerArray = [];
+    pScoreEle.innertext = "";
+    cScoreEle.innertext = "";
+    pCardEle.innertext = "";
+    cCardEle.innertext = "";
+    turnEle.innertext = 0;
 
     Deck.Load();
 
@@ -18,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //   console.log(card);
     // });
     let random;
-    let handSize = cardArray.length / 2;
+    handSize = cardArray.length / 2;
     console.log(handSize);
 
     for (let i = 0; i < cardArray.length; i++) {
@@ -35,11 +48,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
       computerArray[i] = shuffledDeck[i];
       playerArray[i] = shuffledDeck[i + 26];
     }
-
-    document.getElementById("rules").style.display = "none";
-    document.getElementById("deal").style.display = "none";
+    //Move the Deck reset here to ensure it happens after the Deck is created but doesn't break the game before the game actually plays.
+    cardArray.length = 0;
+    rulesEle.style.display = "none";
+    dealEle.style.display = "none";
     document.getElementById("gamefield").style.display = "block";
-    document.getElementById("next").style.display = "block";
+    nextEle.style.display = "block";
 
     console.log("Player Hand");
     for (let i = 0; i < handSize; i++) {
@@ -52,11 +66,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   });
 
-  document.getElementById("next").addEventListener("click", function() {
+  nextEle.addEventListener("click", function() {
     let handSize = playerArray.length;
-    let turnCounter = Number(document.getElementById("turnCounter").innerText);
-    let playerScore = Number(document.getElementById("playerScore").innerText);
-    let computerScore = Number(document.getElementById("computerScore").innerText);
+    let turnCounter = Number(turnEle.innerText);
+    let playerScore = Number(pScoreEle.innerText);
+    let computerScore = Number(cScoreEle.innerText);
 
     if (playerArray[turnCounter].rank > computerArray[turnCounter].rank) {
       playerScore++;
@@ -67,63 +81,113 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (playerArray[turnCounter].rank === computerArray[turnCounter].rank){
       if (playerArray[turnCounter].suit > computerArray[turnCounter].suit){
         playerScore++;
-        document.getElementById("message").innerText = "You won the hand.";
+        messageEle.innerText = "You won the hand.";
       }
       if (playerArray[turnCounter].suit < computerArray[turnCounter].suit){
         computerScore++;
-        document.getElementById("message").innerText = "You lost the hand.";
+        messageEle.innerText = "You lost the hand.";
       }
     }
-    let playerCardDisplay = "Rank: " + swapRank(playerArray[turnCounter].Rank) + " Suit: " + swapSuit(playerArray[turnCounter].Suit);
-    document.getElementById("playerCard").innerText = playerCardDisplay;
-    document.getElementById("computerCard").innerText = "Rank: " + swapRank(computerArray[turnCounter].Rank) + " Suit: " + " " + swapSuit(computerArray[turnCounter].Suit);
-      
-    document.getElementById("playerScore").innerText = playerScore;
-    document.getElementById("computerScore").innerText = computerScore;
+    
+    swapRank(playerArray[turnCounter]);
+    swapSuit(playerArray[turnCounter]);
+    swapRank(computerArray[turnCounter]);
+    swapSuit(computerArray[turnCounter]);
 
-    document.getElementById("turnCounter").innerText = ++turnCounter;
+    if (playerArray[turnCounter].suit === "SPADE" || playerArray[turnCounter].suit === "CLUB"){
+      pCardEle.style.color = "black";
+      pCardEle.style.fontSize = "3em";      
+    }
+    else {
+      pCardEle.style.color = "red";
+      pCardEle.style.fontSize = "3em";
+    };
+    if (computerArray[turnCounter].suit === "SPADE" || computerArray[turnCounter].suit === "CLUB"){
+      cCardEle.style.color = "black";
+      cCardEle.style.fontSize = "3em";
+    }
+    else {
+      cCardEle.style.color = "red";
+      cCardEle.style.fontSize = "3em";
+    }
+
+    pCardEle.innerText = playerArray[turnCounter].rank + " " + playerArray[turnCounter].suit;
+    cCardEle.innerText = computerArray[turnCounter].rank + " " + computerArray[turnCounter].suit;
+
+    pScoreEle.innerText = playerScore;
+    cScoreEle.innerText = computerScore;
+
+    turnEle.innerText = ++turnCounter;
 
     if (turnCounter === handSize) {
       if (playerScore > computerScore) {
-        document.getElementById("message").innerText = "Game over. YOU WON!";
+        messageEle.innerText = "Game over. YOU WON!";
       }
       if (playerScore < computerScore) {
-        document.getElementById("message").innerText = "Game over. You lost.";
+        messageEle.innerText = "Game over. You lost.";
       }
       if (playerScore === computerScore) {
-        document.getElementById("message").innerText =
+        messageEle.innerText =
           "Game over. It is a tie!";
       }
-      document.getElementById("next").style.display = "none";
+      nextEle.style.display = "none";
+      // TODO: Need to figure out how to reset the game properly. Resetting the game goes into an infinite loop in several places for some reason. Fixed several but still find more. UGH!!!!!
+      //dealEle.style.display = "block";
     }
   });
 
-  let swapRank = function(pRank) {
-    switch (pRank) {
+  let swapRank = function(pCard) {
+    switch (pCard.rank) {
       case 11:
-        pRank = "JACK";
+        pCard.rank = "JACK";
+        break;
       case 12:
-        pRank = "QUEEN";
+        pCard.rank = "QUEEN";
+        break;
       case 13:
-        pRank = "KING";
+        pCard.rank = "KING";
+        break;
       case 14:
-        pRank = "ACE";
+        pCard.rank = "ACE";
+        break;
       default:
         break;
     }
-    return pRank;
+    return pCard;
   };
-  let swapSuit = function(pSuit){
-    switch (pSuit) {
+
+  let swapSuit = function(pCard){
+    switch (pCard.suit) {
       case 1:
-        pSuit = "SPADE";
+        pCard.suit = "SPADE";
+        break;
       case 2:
-        pSuit = "CLUB";
+        pCard.suit = "CLUB";
+        break;
       case 3:
-        pSuit = "DIAMOND";
+        pCard.suit = "DIAMOND";
+        break;
       case 4:
-        pSuit = "HEART";
+        pCard.suit = "HEART";
+        break;
     }
-    return pSuit;
+    return pCard;
   };
+
+  let swapSuitStyle = function(pCard) {
+    switch (pCard.suit){
+      case 1:
+        pCard.suit = "SPADE";
+        break;
+      case 2:
+        pCard.suit = "CLUB";
+        break;
+      case 3:
+        pCard.suit = "DIAMOND";
+        break;
+      case 4:
+        pCard.suit = "HEART";
+        break;
+    }
+  }
 });

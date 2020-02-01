@@ -7,6 +7,7 @@ body{
   border-style: solid;
   border-color: darkblue;
   border-width: 20px;
+  background-color: forestgreen;
 }
 
 #rules{
@@ -29,6 +30,6 @@ body{
   width: 100px;
   height: 40px;
   border-radius: 15px;
-  background-color: forestgreen;
+  background-color: darkgreen;
   display: none;
 }
